@@ -12,6 +12,9 @@ function Header(props) {
       <div className="headertabs" onClick={e => navigate("/chrono")}>
         Chrono
       </div>
+      <div className="headertabs" onClick={e => navigate("/rtlc")}>
+        RTLC
+      </div>
     </div>
   )
 }

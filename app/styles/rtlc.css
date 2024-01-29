@@ -1,0 +1,17 @@
+img {
+  height: 60%;
+  width: 60%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.timeline {
+  position: absolute;
+  bottom: 0px;
+  left: 20px;
+  height: 50vh;
+  width: 30vw;
+  overflow-y: auto;
+}

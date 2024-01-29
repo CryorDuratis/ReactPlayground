@@ -18,6 +18,9 @@ module.exports = {
     liveReload: false,
     historyApiFallback: { index: "index.html" }
   },
+  resolve: {
+    extensions: [".js", ".jsx", ".css"]
+  },
   module: {
     rules: [
       {
@@ -29,6 +32,10 @@ module.exports = {
             presets: ["@babel/preset-react", ["@babel/preset-env", { targets: { node: "12" } }]]
           }
         }
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
       }
     ]
   }

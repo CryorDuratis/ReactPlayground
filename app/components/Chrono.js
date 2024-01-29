@@ -4,18 +4,20 @@ import { Chrono } from "react-chrono"
 
 function RChrono(props) {
   return (
-    <div className="wireframe timeline" style={{ width: "50%", height: "50vh", margin: "20px" }}>
+    <div className="wireframe timeline">
       <Chrono
         items={items}
         mode="VERTICAL"
         cardHeight={100}
-        cardWidth={400}
+        cardWidth={300}
         fontSizes={{
-          title: "1rem"
+          title: "12px"
         }}
         contentDetailsHeight={150}
         disableAutoScrollOnClick
-        enableOutline
+        disableNavOnKey
+        useReadMore={false}
+        hideControls
       />
     </div>
   )

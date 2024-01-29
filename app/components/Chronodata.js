@@ -1,8 +1,12 @@
 import React from "react"
 
+const autoresize = textarea => {
+  textarea.style.height = "0"
+  textarea.style.height = `${textarea.scrollHeight}px`
+}
+
 const items = [
   {
-    title: "May 1940",
     cardTitle: "Dunkirk",
     url: "http://google.com",
     cardSubtitle: "Men of the British Expeditionary Force (BEF) wade out to a destroyer during the evacuation from Dunkirk.",
@@ -22,41 +26,38 @@ const items = [
 
         <div className="comment">
           <div className="user">Your Name</div>
-          <div className="timestamp">Posted on January 3, 2022</div>
-          <textarea placeholder="Add a comment..."></textarea>
+          <textarea placeholder="reply" rows={1} onInput={e => autoresize(e.target)}></textarea>
           <button>Post Comment</button>
         </div>
       </div>
     )
   },
   {
-    title: "25 July 1940",
     cardTitle: "The Battle of Britain",
     cardSubtitle: `RAF Spitfire pilots scramble for their planes`,
     timelineContent: (
-      <div className="reply-section">
-        <div className="reply-item">
-          <p className="username">User1:</p>
-          <p>First Reply</p>
+      <div className="comment-section">
+        <div className="comment">
+          <div className="user">John Doe</div>
+          <div className="timestamp">Posted on January 1, 2022</div>
+          <p>This is a comment. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </div>
-        <div className="reply-item">
-          <p className="username">User2:</p>
-          <p>Second Reply</p>
+
+        <div className="comment">
+          <div className="user">Jane Smith</div>
+          <div className="timestamp">Posted on January 2, 2022</div>
+          <p>Another comment here. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         </div>
-        <form className="reply-form">
-          <label htmlFor="replyUsername">Your Username:</label>
-          <input type="text" id="replyUsername" name="replyUsername" required />
-          <br />
-          <label htmlFor="replyText">Your Reply:</label>
-          <textarea id="replyText" name="replyText" rows="3" required></textarea>
-          <br />
-          <button type="submit">Add Reply</button>
-        </form>
+
+        <div className="comment">
+          <div className="user">Your Name</div>
+          <textarea placeholder="reply"></textarea>
+          <button>Post Comment</button>
+        </div>
       </div>
     )
   },
   {
-    title: "June 1941",
     cardTitle: "Operation Barbarossa",
     cardSubtitle: `A column of Red Army prisoners taken during the first days of the German invasion`,
     cardDetailedText: `Since the 1920s, Hitler had seen Russia, with its immense natural resources, as the principal target for conquest and expansion. It would provide, he believed, the necessary ‘Lebensraum’, or living space, for the German people. And by conquering Russia, Hitler would also destroy the “Jewish pestilential creed of Bolshevism”. His non-aggression pact with Stalin in August 1939 he regarded as a mere temporary expedient.
@@ -64,14 +65,12 @@ const items = [
         On 5/6 December, the Red Army launched a counter-offensive which removed the immediate threat to the Soviet capital. It also brought the German high command to the brink of a catastrophic military crisis. Hitler stepped in and took personal command. His intervention was decisive and he later boasted, “That we overcame this winter and are today in a position again to proceed victoriously… is solely attributable to the bravery of the soldiers at the front and my firm will to hold out…”`
   },
   {
-    title: "7 December 1941",
     cardTitle: "Pearl Harbor",
     cardSubtitle: `The destroyer USS Shaw explodes in dry dock after being hit by Japanese aircraft`,
     cardDetailedText: `After Japan’s occupation of French Indo-China in July 1941, US President Franklin D Roosevelt, followed by Britain and the Netherlands, ordered the freezing of Japanese assets.
         Many Japanese now believed that there was no alternative between economic ruin and going to war with the United States and the European colonial powers. In October 1941, a hardline government under General Hideki Tojo came to power, and preparations were made to deliver a devastating blow against the Americans.`
   },
   {
-    title: "15 February 1942",
     cardTitle: "The fall of Singapore",
     cardSubtitle: `Lieutenant General Arthur Percival and staff on their way to the Singapore Ford factory to negotiate the island’s surrender with General Yamashita`,
     cardDetailedText: `The Japanese began their invasion of Malaya on 8 December 1941, and very soon the British and empire defenders were in full retreat.
@@ -80,7 +79,6 @@ const items = [
         Churchill described the surrender as, “the worst disaster… in British military history”. Over 130,000 British and empire troops surrendered to a much smaller Japanese force, which only suffered 9,824 battle casualties during the 70-day campaign. Singapore was not only a humiliating military defeat, but also a tremendous blow to the prestige of the ‘white man’ throughout Asia.`
   },
   {
-    title: "4 June 1942",
     cardTitle: "Midway",
     cardSubtitle: `The American aircraft carrier USS Yorktown under Japanese attack during the battle of Midway`,
     cardDetailedText: `For six months after Pearl Harbor, just as Admiral Yamamoto predicted, Japanese forces carried all before them, capturing Hong Kong, Malaya, the Philippines and the Dutch East Indies. In May 1942, in an attempt to consolidate their grip on their new conquests, the Japanese sought to eliminate the United States as a strategic Pacific power.
@@ -88,7 +86,6 @@ const items = [
         During the ensuing battle the Japanese suffered the loss of four carriers, one heavy cruiser and 248 aircraft, while American losses totalled one carrier, one destroyer and 98 planes. By their victory at Midway, the turning point of the Pacific war, the Americans were able to seize the strategic initiative from the Japanese, who had suffered irreplaceable losses. Admiral Nimitz described the battle’s success as “Essentially a victory of intelligence”, while President Roosevelt called it “Our most important victory in 1942… there we stopped the Japanese offensive.”`
   },
   {
-    title: "25 October 1942",
     cardTitle: "Alamein",
     cardSubtitle: `German prisoners of war wait for transport after their capture at Alamein`,
     cardDetailedText: `The North African campaign began in September1940, and for the next two years the fighting was marked by a succession of Allied and Axis advances and retreats. In the summer of 1942, the Axis forces under ‘Desert Fox’ field marshal, Erwin Rommel, looked poised to take Cairo and advance on the Suez Canal.
@@ -97,7 +94,6 @@ const items = [
         Although Montgomery has been criticised for being too cautious in exploiting his success at Alamein, it made him a household name and he became Britain’s most popular general of the war. Churchill hailed Alamein as a “Glorious and decisive victory… the bright gleam has caught the helmets of our soldiers, and warmed and cheered all our hearts”.`
   },
   {
-    title: "February 1943",
     cardTitle: "Stalingrad",
     cardSubtitle: `Red Army soldiers hoist the Soviet flag over a recaptured Stalingrad factory following the German surrender`,
     cardDetailedText: `Throughout September and October, under General Vassili Chuikov, the city’s defenders contested every yard of ground of the devastated city.
@@ -106,7 +102,6 @@ const items = [
         `
   },
   {
-    title: "6 June 1944",
     cardTitle: "D-Day, Operation Overlord",
     cardSubtitle: `British commandos of the First Special Service Brigade land on Sword Beach`,
     cardDetailedText: `Operation Overlord, the invasion and liberation of north-west Europe, began on D-Day, 6 June 1944.
@@ -115,7 +110,6 @@ const items = [
         It was not until 4 May 1945 that the German forces in north-west Europe surrendered to Montgomery at his HQ on Lüneburg Heath.`
   },
   {
-    title: "February 1945",
     cardTitle: "The Big Three",
     cardSubtitle: `Churchill, Roosevelt and Stalin sit for a group photograph during the Yalta conference`,
     cardDetailedText: `Between June 1940 and June 1941, Britain stood alone against Hitler. But then, after the German invasion of Russia and the Japanese attack on Pearl Harbor, she gained two powerful allies.
@@ -123,7 +117,6 @@ const items = [
         Churchill conferred with both Roosevelt and Stalin to hammer out strategy and to discuss postwar arrangements. The three men congregated for the first time at Tehran in November 1943. There, and again at their last meeting at Yalta, Churchill was conscious of the fact that Britain, exhausted by her war effort, was now very much the junior partner of the two emerging superpowers.`
   },
   {
-    title: "13/14 February 1945",
     cardTitle: "Dresden",
     cardSubtitle: `Dresden under incendiary bomb attack`,
     cardDetailedText: `At Yalta, an Allied plan to bomb the hitherto untouched city of Dresden was discussed. The reason for attacking the city was due principally to its strategic importance as a communications centre in the rear of the German retreat that followed the Soviet winter offensive of January 1945. It was also believed that Dresden might be used as an alternative to Berlin as the Reich capital.
@@ -131,7 +124,6 @@ const items = [
         Now, on the night of 13/14 February 1945, Dresden was attacked by 800 RAF bombers, followed by 400 bombers of the United States Army Air Force. The bombing created a firestorm that destroyed 1,600 acres of Dresden. Even today it is still uncertain as to how many died and estimates have ranged from 25,000 to 135,000. Most authorities now put the death toll at around 35,000. The scale of destruction, the enormous death toll, and its timing at such a late stage in the war, have all ensured that the bombing of Dresden still remains highly controversial.`
   },
   {
-    title: "8 May 1945",
     cardTitle: "VE Day",
     cardSubtitle: `millions of people rejoice in the news that Germany has surrendered – the war in Europe was finally over`,
     cardDetailedText: `On the afternoon of 8 May 1945, the British prime minister Winston Churchill made the radio announcement that the world had long been waiting for.
@@ -139,7 +131,6 @@ const items = [
         After nearly six years, the war in Europe was finally over.`
   },
   {
-    title: "9 August 1945",
     cardTitle: "Nagasaki",
     cardSubtitle: `Atomic bomb mushroom cloud over the Japanese city of Nagasaki`,
     cardDetailedText: `The Second World War began at dawn on Friday 1 September 1939, when Adolf Hitler launched his invasion of Poland.

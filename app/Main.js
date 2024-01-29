@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Header from "./components/Header"
 import Home from "./components/Home"
 import RChrono from "./components/Chrono"
+import RTLC from "./components/RTLC"
 
 function MainComponent() {
   return (
@@ -16,6 +17,7 @@ function MainComponent() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/chrono" element={<RChrono />} />
+        <Route path="/rtlc" element={<RTLC />} />
       </Routes>
     </BrowserRouter>
   )

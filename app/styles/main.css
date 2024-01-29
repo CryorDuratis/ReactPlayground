@@ -15,3 +15,7 @@ body {
 .headertabs {
   margin: 20px;
 }
+textarea {
+  font-family: "Open Sans";
+  font-size: 10px;
+}
