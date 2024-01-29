@@ -1,0 +1,58 @@
+.App {
+  font-family: "Nunito", sans-serif;
+  text-align: center;
+}
+.comment-section {
+  margin-top: 20px;
+  height: 150px;
+  overflow-y: auto;
+}
+
+.comment {
+  border-bottom: 1px solid #ddd;
+  padding: 8px; /* Reduced padding */
+}
+
+.comment:last-child {
+  border-bottom: none;
+}
+
+.comment .user {
+  font-weight: bold;
+  margin-bottom: 3px; /* Reduced margin */
+}
+
+.comment .timestamp {
+  font-size: 0.8em;
+  color: #888;
+}
+
+.comment textarea {
+  width: 100%;
+  margin-top: 5px; /* Reduced margin */
+}
+
+.comment button {
+  margin-top: 5px; /* Reduced margin */
+}
+.reply-section {
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 2px solid #ccc;
+  height: 150px;
+  overflow-y: auto;
+}
+
+.reply-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.username {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.reply-form {
+  margin-top: 10px;
+}
