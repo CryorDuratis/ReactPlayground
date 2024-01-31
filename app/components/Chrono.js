@@ -14,11 +14,10 @@ function RChrono(props) {
           title: "12px"
         }}
         contentDetailsHeight={150}
-        disableAutoScrollOnClick
         disableNavOnKey
         useReadMore={false}
         hideControls
-      />
+      ></Chrono>
     </div>
   )
 }

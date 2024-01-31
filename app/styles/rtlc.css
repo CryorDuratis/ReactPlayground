@@ -11,7 +11,14 @@ img {
   position: absolute;
   bottom: 0px;
   left: 20px;
-  height: 50vh;
+  height: 80vh;
   width: 30vw;
   overflow-y: auto;
+}
+
+.vertical-timeline-element-content p {
+  font-size: 10px !important;
+}
+.vertical-timeline-element-content {
+  border: 1px solid #eee;
 }
