@@ -165,3 +165,9 @@
 .widget-dropdown-selected {
   background-color: aqua !important;
 }
+
+/* gridstack */
+
+.grid-stack-item-content {
+  border: 1px solid black;
+}
