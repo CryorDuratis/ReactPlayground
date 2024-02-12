@@ -50,7 +50,7 @@ function Gridstacked(props) {
     // console.log("before", grid.getGridItems())
 
     gridLayout.forEach((item) => {
-      grid.makeWidget(`#${id}`, item)
+      grid.makeWidget(`#${item.id}`, item)
     })
     grid.commit() // this
     console.log(gridLayout)
