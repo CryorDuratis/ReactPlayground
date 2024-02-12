@@ -84,7 +84,7 @@ function RGL(props) {
         </CDropdownMenu>
       </CDropdown>{" "}
       <button onClick={handleSaveLayout}>Save Layout</button>
-      <ResponsiveGridLayout className="layout" layout={gridLayout} cols={12} resizeHandles={["n", "s", "e", "w", "ne", "nw", "se", "sw"]} rowHeight={90} maxRows={6} preventCollision compactType={null} onLayoutChange={onLayoutChange}>
+      <ResponsiveGridLayout className="layout" layout={gridLayout} cols={12} resizeHandles={["ne", "nw", "se", "sw"]} rowHeight={90} maxRows={6} preventCollision compactType={null} onLayoutChange={onLayoutChange}>
         {gridLayout.map((item) => (
           <div key={item.i} className="react-grid-item" style={{ border: "1px solid black" }}>
             <ResourcesWidget />
