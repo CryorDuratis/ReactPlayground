@@ -1,6 +1,16 @@
 import React, { useState } from "react"
 import { DonutWidget, StatWidget } from "./WidgetStyles"
 
+export const WidgetSwitchBoard = (props) => {
+  switch (props.id) {
+    case "map":
+      return
+
+    default:
+      break
+  }
+}
+
 export const ResourcesWidget = (props) => {
   // query for resources data
   const chartData = {

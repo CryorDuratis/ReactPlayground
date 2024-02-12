@@ -5,7 +5,31 @@ import { CDropdown, CDropdownToggle, CDropdownMenu, CDropdownItem } from "@coreu
 import "@coreui/coreui/dist/css/coreui.min.css"
 import { ResourcesWidget } from "./Widgets"
 
-const ControlledStack = ({ items, addItem }) => {
+function Gridstacked(props) {
+  // LOAD and DISPLAY widgets in grid layout ------------------------------------------------------------------------------------------
+  // current grid layout with an example generic initial state before the departments customise for themselves
+  // the selected widgets highlight in the dropdown will also depend on this state
+  const [gridLayout, setGridLayout] = useState([
+    { id: "map", x: 3, y: 1, w: 4, h: 3, locked: true },
+    { id: "casualty", x: 1, y: 0, w: 1, h: 1, autoPosition: true, noResize: true }
+  ])
+
+  // Load the saved grid layout from somewhere (eg localstorage)
+  // Set the current grid layout state to align to the saved layout. Component re-renders the new grid layout state.
+  const handleLoadLayout = () => {
+    const savedLayoutData = localStorage.getItem("savedGridstack")
+    if (savedLayoutData) {
+      const parsedData = JSON.parse(savedLayoutData)
+      console.log("setting gridlayout as saved data: ", parsedData)
+      setGridLayout(parsedData)
+    }
+  }
+
+  // on dashboard mount, query for savedlayout based on department and load it
+  useEffect(() => {
+    handleLoadLayout()
+  }, [])
+
   // this component is used to initiate and define the gridstack widget containers and their respective content, to facilitate its subsequent use.
   // items is the usestate referring to the list of widget containers. the content will be added to them here.
   // additem is the add widget function passed from the parent to the dropdown button shown here due to the usestate being in the parent
@@ -13,8 +37,8 @@ const ControlledStack = ({ items, addItem }) => {
   const gridRef = useRef()
 
   // this creates a reference to enable the mapping of content later
-  if (Object.keys(refs.current).length !== items.length) {
-    items.forEach(({ id }) => {
+  if (Object.keys(refs.current).length !== gridLayout.length) {
+    gridLayout.forEach(({ id }) => {
       refs.current[id] = refs.current[id] || createRef()
     })
   }
@@ -36,86 +60,28 @@ const ControlledStack = ({ items, addItem }) => {
     const grid = gridRef.current
     grid.batchUpdate()
     grid.removeAll(false)
-    items.forEach((item) => grid.makeWidget(refs.current[item.id].current, { x: item.x, y: item.y, w: item.w, h: item.h }))
-    grid.commit()
-  }, [items])
-
-  const updatepos = () => {
-    gridRef.current =
-      gridRef.current ||
-      GridStack.init(
-        {
-          float: true
-        },
-        ".controlled"
-      )
-    const grid = gridRef.current
-
-    grid.update(
-      grid.getGridItems().find((widget) => widget.id === "map"),
-      4
-    )
-
-    console.log(refs.current["map"].current)
-    grid.commit()
-  }
-
-  return (
-    <div>
-      <button onClick={updatepos}>Add new widget</button>
-      <div className={`grid-stack controlled`}>
-        {items.map((item, i) => {
-          return (
-            <div ref={refs.current[item.id]} key={item.id} className={"grid-stack-item"}>
-              <div className="grid-stack-item-content">
-                <ResourcesWidget />
-              </div>
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-function Gridstacked(props) {
-  // LOAD and DISPLAY widgets in grid layout ------------------------------------------------------------------------------------------
-  // current grid layout with an example generic initial state before the departments customise for themselves
-  // the selected widgets highlight in the dropdown will also depend on this state
-  const [gridLayout, setGridLayout] = useState([
-    { id: "map", x: 3, y: 1, w: 4, h: 3 },
-    { id: "incidents", x: 1, y: 0, w: 1, h: 1 }
-  ])
-
-  // Load the saved grid layout from somewhere (eg localstorage)
-  // Set the current grid layout state to align to the saved layout. Component re-renders the new grid layout state.
-  const handleLoadLayout = () => {
-    const savedLayoutData = localStorage.getItem("savedGridstack")
-    if (savedLayoutData) {
-      const parsedData = JSON.parse(savedLayoutData)
-      console.log("setting gridlayout as saved data: ", parsedData)
-      setGridLayout(parsedData)
-    }
-  }
-
-  // on dashboard mount, query for savedlayout based on department and load it
-  useEffect(() => {
-    // handleLoadLayout()
-  }, [])
+    gridLayout.forEach((item) => {
+      const { id, ...formatitem } = item // split id and other properties for element selection and layouting purposes
+      const el = grid.makeWidget(refs.current[id].current, formatitem)
+      el.setAttribute("id", id)
+    })
+    grid.commit() // this
+    console.log(gridLayout)
+  }, [gridLayout])
 
   // ADD and REMOVE widgets --------------------------------------------------------------------------------------------------
   // possible widgets. this shouldnt change often since new code has to be written for each widget, so it could be fixed here locally.
   // this stores the list of dropdown items as well as the container configurations for each widget.
   const widgetOptions = [
     { id: "map", x: 3, y: 1, w: 4, h: 3, locked: true },
-    { id: "casualty", x: 1, y: 0, w: 1, h: 1, noResize: true },
-    { id: "resources", x: 4, y: 0, w: 2, h: 1 },
+    { id: "casualty", x: 1, y: 0, w: 1, h: 1, autoPosition: true, noResize: true },
+    { id: "resources", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
     { id: "div1", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
     { id: "div2", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
     { id: "div3", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
     { id: "div4", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
-    { id: "shelters", x: 4, y: 0, w: 2, h: 1 },
-    { id: "incidents", x: 4, y: 0, w: 2, h: 1 }
+    { id: "shelters", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
+    { id: "incidents", x: 4, y: 0, w: 2, h: 1, autoPosition: true }
   ]
 
   // on selection, if selected, remove from gridlayout, else add selected widget to the gridlayout. This changes the state and makes the grid render the newly selected widget immediately. The dropdown should also reflect this change.
@@ -130,41 +96,53 @@ function Gridstacked(props) {
   }
 
   // EDIT and SAVE grid layout -------------------------------------------------------------------------------------------------------------------
-  // update the current grid layout state whenever a drag or resize is done
-  const onLayoutChange = (newLayout) => {
-    console.log(newLayout)
-    setGridLayout(newLayout)
-  }
 
   // if the user is happy with the new layout, they can save the current grid layout to storage, this will be the default layout on the next load.
   const handleSaveLayout = () => {
-    localStorage.setItem("savedGridstack", JSON.stringify(gridLayout))
+    const savedlayout = gridLayout.map(({ autoPosition, ...item }) => item)
+    const gridstacksave = gridRef.current.save(false)
+    console.log(savedlayout)
+    console.log(gridstacksave)
+    // // gridlayout usestate does not update on change.
+    // for (let index = 0; index < savedlayout.length; index++) {
+    //   savedlayout[index].x = gridstacksave[index].x
+    //   savedlayout[index].y = gridstacksave[index].y
+    //   savedlayout[index].w = gridstacksave[index].w
+    //   savedlayout[index].h = gridstacksave[index].h
+    // }
+    // console.log(savedlayout)
+    // console.log(gridstacksave)
+    localStorage.setItem("savedGridstack", JSON.stringify(savedlayout))
   }
 
   // RENDER --------------------------------
-
   return (
-    <ControlledStack items={gridLayout} addItem={handleWidgetSelect} />
-    // <div>
-    //   <CDropdown autoClose={"outside"}>
-    //     <CDropdownToggle caret color="primary">
-    //       Customise Widgets
-    //     </CDropdownToggle>
-    //     <CDropdownMenu>
-    //       {widgetOptions.map((widget, index) => (
-    //         <CDropdownItem key={index} onClick={() => handleWidgetSelect(widget)} className={gridLayout.some((current) => current.id === widget.id) ? "widget-dropdown-selected" : undefined}>
-    //           {widget.id}
-    //         </CDropdownItem>
-    //       ))}
-    //     </CDropdownMenu>
-    //   </CDropdown>{" "}
-    //   <button onClick={handleSaveLayout}>Save Layout</button>
-    //   <div className="grid-stack">
-    //     <div id="gsi-1" gs-x="0" gs-y="0" gs-w="3" gs-h="2" gs-auto-position="true">
-    //       test
-    //     </div>
-    //   </div>
-    // </div>
+    <div>
+      <CDropdown autoClose={"outside"}>
+        <CDropdownToggle caret color="primary">
+          Customise Widgets
+        </CDropdownToggle>
+        <CDropdownMenu>
+          {widgetOptions.map((widget, index) => (
+            <CDropdownItem key={index} onClick={() => handleWidgetSelect(widget)} className={gridLayout.some((current) => current.id === widget.id) ? "widget-dropdown-selected" : undefined}>
+              {widget.id}
+            </CDropdownItem>
+          ))}
+        </CDropdownMenu>
+      </CDropdown>{" "}
+      <button onClick={handleSaveLayout}>Save Layout</button>
+      <div className={`grid-stack controlled`}>
+        {gridLayout.map((item, i) => {
+          return (
+            <div ref={refs.current[item.id]} key={item.id} className={"grid-stack-item"}>
+              <div className="grid-stack-item-content">
+                <ResourcesWidget id={item.id} />
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 

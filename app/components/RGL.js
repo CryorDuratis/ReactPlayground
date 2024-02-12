@@ -12,9 +12,7 @@ function RGL(props) {
   // the selected widgets highlight in the dropdown will also depend on this state
   const [gridLayout, setGridLayout] = useState([
     { i: "map", x: 3, y: 1, w: 4, h: 3, static: true },
-    { i: "incidents", x: 4, y: 0, w: 2, h: 1 },
-    { i: "casualty", x: 1, y: 0, w: 1, h: 1, isResizable: false },
-    { i: "resources", x: 4, y: 0, w: 2, h: 1 }
+    { i: "casualty", x: 1, y: 0, w: 1, h: 1, isResizable: false }
   ])
 
   // Load the saved grid layout from somewhere (eg localstorage)
