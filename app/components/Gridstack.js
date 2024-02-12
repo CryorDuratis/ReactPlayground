@@ -7,13 +7,9 @@ import { ResourcesWidget } from "./Widgets"
 
 function Gridstacked(props) {
   // LOAD and DISPLAY widgets in grid layout ------------------------------------------------------------------------------------------
-
   // current grid layout with an example generic initial state before the departments customise for themselves
   // the selected widgets highlight in the dropdown will also depend on this state
-  const [gridLayout, setGridLayout] = useState([
-    { id: "map", x: 3, y: 1, w: 4, h: 3, locked: true },
-    { id: "casualty", x: 1, y: 0, w: 1, h: 1, autoPosition: true, noResize: true }
-  ])
+  const [gridLayout, setGridLayout] = useState([])
 
   // Load the saved grid layout from somewhere (eg localstorage)
   // Set the current grid layout state to align to the saved layout. Component re-renders the new grid layout state.
@@ -31,43 +27,34 @@ function Gridstacked(props) {
     handleLoadLayout()
   }, [])
 
-  // this component is used to initiate and define the gridstack widget containers and their respective content, to facilitate its subsequent use.
-  // items is the usestate referring to the list of widget containers. the content will be added to them here.
-  // additem is the add widget function passed from the parent to the dropdown button shown here due to the usestate being in the parent
-  const refs = useRef({})
+  // whenever the widget list changes due to the widget selection dropdown or remove button:
+  // destroy the previous grid instance and reinitiate a new grid
+  // batchupdate() update the grid values based on the current state, prevents unnecessary re-layouting when new widgets are added.
+  // removeall(false) empties the grid instance without emptying the DOM
+  // for each id in the list of selected widgets, create and add that widget (assigns the element to the resize and drag properties and methods)
   const gridRef = useRef()
 
-  // this creates a reference to enable the mapping of content later
-  if (Object.keys(refs.current).length !== gridLayout.length) {
-    gridLayout.forEach(({ id }) => {
-      refs.current[id] = refs.current[id] || createRef()
-    })
-  }
-
-  // whenever the widget list changes due to the widget selection dropdown or remove button:
-  // initiate the grid if it doesnt exist
-  // batchupdate() update the grid values based on the current state, prevents unnecessary re-layouting when new widgets are added.
-  // removeall(false) empties the grid rendered without emptying the DOM
-  // for each id in the list of selected widgets, create and add that widget
   useEffect(() => {
-    gridRef.current =
-      gridRef.current ||
-      GridStack.init(
-        {
-          float: true
-        },
-        ".dashboard"
-      )
+    gridRef.current?.destroy(false)
+    gridRef.current = GridStack.init(
+      {
+        float: true
+      },
+      ".dashboard"
+    )
     const grid = gridRef.current
+    // console.log("before batchupdate", grid.getGridItems())
     grid.batchUpdate()
+    // console.log("before removeall", grid.getGridItems())
     grid.removeAll(false) // make sure the grid is empty first
+    // console.log("before", grid.getGridItems())
+
     gridLayout.forEach((item) => {
-      const { id, ...formatitem } = item // split id and other properties for element selection and layouting purposes
-      // grid.makeWidget(refs.current[id].current, item)
-      // el.setAttribute("id", id)
+      grid.makeWidget(`#${id}`, item)
     })
     grid.commit() // this
-    // console.log(gridLayout)
+    console.log(gridLayout)
+    console.log("after", grid.getGridItems())
   }, [gridLayout])
 
   // ADD and REMOVE widgets --------------------------------------------------------------------------------------------------
@@ -95,26 +82,13 @@ function Gridstacked(props) {
     }
   }
 
-  useEffect(() => {
-    console.log("gridLayout", gridLayout)
-  }, [gridLayout])
-
   // EDIT and SAVE grid layout -------------------------------------------------------------------------------------------------------------------
 
   // if the user is happy with the new layout, they can save the current grid layout to storage, this will be the default layout on the next load.
   const handleSaveLayout = () => {
     const savedlayout = gridRef.current.save(false)
     console.log("savedlayout", savedlayout)
-    // // gridlayout usestate does not update on change.
-    // for (let index = 0; index < savedlayout.length; index++) {
-    //   savedlayout[index].x = gridstacksave[index].x
-    //   savedlayout[index].y = gridstacksave[index].y
-    //   savedlayout[index].w = gridstacksave[index].w
-    //   savedlayout[index].h = gridstacksave[index].h
-    // }
-    // console.log(savedlayout)
-    // console.log(gridstacksave)
-    // localStorage.setItem("savedGridstack", JSON.stringify(savedlayout))
+    localStorage.setItem("savedGridstack", JSON.stringify(savedlayout))
   }
 
   // RENDER --------------------------------
@@ -136,8 +110,9 @@ function Gridstacked(props) {
       <div className={`grid-stack dashboard`}>
         {gridLayout.map((item, i) => {
           return (
-            <div ref={refs.current[item.id]} key={item.id} className={"grid-stack-item"}>
+            <div id={item.id} key={item.id} className={"grid-stack-item"}>
               <div className="grid-stack-item-content">
+                <h2>{item.id}</h2>
                 <ResourcesWidget id={item.id} />
               </div>
             </div>
