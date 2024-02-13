@@ -153,3 +153,21 @@
 .react-resizable-handle-s {
   bottom: 0;
 }
+
+.layout {
+  max-height: 100vh;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+/* dropdown */
+
+.widget-dropdown-selected {
+  background-color: aqua !important;
+}
+
+/* gridstack */
+
+.grid-stack-item-content {
+  border: 1px solid black;
+}

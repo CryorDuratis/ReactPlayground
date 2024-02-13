@@ -10,6 +10,7 @@ import RChrono from "./components/Chrono"
 import RTLC from "./components/RTLC"
 import RGL from "./components/RGL"
 import KendoTL from "./components/KendoTL"
+import Gridstacked from "./components/Gridstack"
 
 function MainComponent() {
   return (
@@ -22,6 +23,7 @@ function MainComponent() {
         <Route path="/rtlc" element={<RTLC />} />
         <Route path="/kendotl" element={<KendoTL />} />
         <Route path="/rgl" element={<RGL />} />
+        <Route path="/gridstack" element={<Gridstacked />} />
       </Routes>
     </BrowserRouter>
   )

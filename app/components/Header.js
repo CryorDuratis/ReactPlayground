@@ -6,20 +6,23 @@ function Header(props) {
 
   return (
     <div className="header wireframe">
-      <div className="headertabs" onClick={e => navigate("/")}>
+      <div className="headertabs" onClick={(e) => navigate("/")}>
         Home
       </div>
-      <div className="headertabs" onClick={e => navigate("/chrono")}>
+      <div className="headertabs" onClick={(e) => navigate("/chrono")}>
         Chrono
       </div>
-      <div className="headertabs" onClick={e => navigate("/rtlc")}>
+      <div className="headertabs" onClick={(e) => navigate("/rtlc")}>
         RTLC
       </div>
       <div className="headertabs" onClick={e => navigate("/kendotl")}>
         kendotl
       </div>
-      <div className="headertabs" onClick={e => navigate("/rgl")}>
+      <div className="headertabs" onClick={(e) => navigate("/rgl")}>
         RGL
+      </div>
+      <div className="headertabs" onClick={(e) => navigate("/gridstack")}>
+        Gridstack
       </div>
     </div>
   )
