@@ -1,0 +1,1 @@
+import { VerticalTimeline } from "react-vertical-timeline-component";

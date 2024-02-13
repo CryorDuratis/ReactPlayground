@@ -9,6 +9,7 @@ import Home from "./components/Home"
 import RChrono from "./components/Chrono"
 import RTLC from "./components/RTLC"
 import RGL from "./components/RGL"
+import KendoTL from "./components/KendoTL"
 
 function MainComponent() {
   return (
@@ -19,6 +20,7 @@ function MainComponent() {
         <Route path="/" element={<Home />} />
         <Route path="/chrono" element={<RChrono />} />
         <Route path="/rtlc" element={<RTLC />} />
+        <Route path="/kendotl" element={<KendoTL />} />
         <Route path="/rgl" element={<RGL />} />
       </Routes>
     </BrowserRouter>

@@ -15,6 +15,9 @@ function Header(props) {
       <div className="headertabs" onClick={e => navigate("/rtlc")}>
         RTLC
       </div>
+      <div className="headertabs" onClick={e => navigate("/kendotl")}>
+        kendotl
+      </div>
       <div className="headertabs" onClick={e => navigate("/rgl")}>
         RGL
       </div>
