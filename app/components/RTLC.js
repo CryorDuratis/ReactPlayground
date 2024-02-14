@@ -7,7 +7,7 @@ function Attachments(props) {
     <img
       style={{ height: "50px", width: "50px", backgroundColor: "white" }}
       src="./public/edit.png"
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation()
         alert(`attachment ${props.file} clicked`)
         // openfile(props.file)
@@ -22,8 +22,7 @@ function RTLElement({ time, title, description, attachments }) {
       icon={<span className="vertical-timeline-element-icon-time"> {time} </span>}
       onTimelineElementClick={() => {
         alert("testclick")
-      }}
-    >
+      }}>
       <h3 className="vertical-timeline-element-title">{title}</h3>
       <p>{description}</p>
       <div style={{ display: "flex", columnGap: "10px", marginTop: "10px" }}>
@@ -37,7 +36,7 @@ function RTLElement({ time, title, description, attachments }) {
 
 function RTLDate(props) {
   // filter to use
-  const opslogThisDate = props.opslog.filter(log => log.datetime.split(",")[0] == props.date.split(",")[0])
+  const opslogThisDate = props.opslog.filter((log) => log.datetime.split(",")[0] == props.date.split(",")[0])
 
   return (
     <>
@@ -60,27 +59,27 @@ function RTLC(props) {
 
   const opslogfromdatabase = [
     {
-      datetime: "1704176400000",
+      datetime: "01-02-2024 14:20:00",
       title: "A Title",
       description: "desc",
       attachments: [1, 2, 3]
     },
     {
-      datetime: "1712045820000",
+      datetime: "04-02-2024 16:17:00",
       title: "A Title Too",
       description: "desc",
       attachments: [1]
     },
     {
-      datetime: "1722563760000",
+      datetime: "08-02-2024 09:56:00",
       title: "A Title again",
       description: "desc",
       attachments: []
     }
   ]
 
-  const formatdates = numericdate => {
-    const date = new Date()
+  const formatdates = (numericdate) => {
+    const date = new Date(numericdate)
     console.log(new Date("01-02-2024 14:20:00").valueOf())
     console.log(new Date("04-02-2024 16:17:00").valueOf())
     console.log(new Date("08-02-2024 09:56:00").valueOf())
@@ -97,7 +96,7 @@ function RTLC(props) {
   }
 
   // get filtered opslog data to display
-  const opslog = opslogfromdatabase.map(e => {
+  const opslog = opslogfromdatabase.map((e) => {
     return { ...e, datetime: formatdates(e.datetime) }
   })
   console.log(opslog)
