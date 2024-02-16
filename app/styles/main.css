@@ -3,12 +3,13 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  /* background-color: black !important;
+  color: white !important; */
 }
 body {
   margin: 0;
   padding: 0;
   font-family: "Open Sans";
-  background-color: black;
 }
 
 .wireframe {
@@ -19,7 +20,7 @@ body {
 .header {
   display: flex;
   justify-content: center;
-  color: white;
+  /* background-color: black !important; */
   height: 60px;
 }
 .headertabs {
@@ -31,4 +32,17 @@ textarea {
 }
 button {
   font-size: 10px;
+}
+.options-button {
+  display: block !important;
+  position: absolute !important;
+  top: 0;
+  right: 0;
+  z-index: 1;
+}
+.options-button:hover {
+  /* background-color: #fff3 !important; */
+}
+.css-78trlr-MuiButtonBase-root-MuiIconButton-root {
+  /* color: white !important; */
 }

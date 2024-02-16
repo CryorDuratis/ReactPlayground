@@ -47,9 +47,9 @@ function RGL(props) {
   ]
 
   // on selection, if selected, remove from gridlayout, else add selected widget to the gridlayout. This changes the state and makes the grid render the newly selected widget immediately. The dropdown should also reflect this change.
-  const handleWidgetSelect = (selectedWidget) => {
-    if (gridLayout.some((current) => current.i === selectedWidget.i)) {
-      setGridLayout(gridLayout.filter((current) => current.i !== selectedWidget.i))
+  const handleWidgetSelect = selectedWidget => {
+    if (gridLayout.some(current => current.i === selectedWidget.i)) {
+      setGridLayout(gridLayout.filter(current => current.i !== selectedWidget.i))
       console.log(selectedWidget.i, " removed")
     } else {
       setGridLayout([...gridLayout, selectedWidget])
@@ -59,7 +59,7 @@ function RGL(props) {
 
   // EDIT and SAVE grid layout -------------------------------------------------------------------------------------------------------------------
   // update the current grid layout state whenever a drag or resize is done
-  const onLayoutChange = (newLayout) => {
+  const onLayoutChange = newLayout => {
     console.log(newLayout)
     setGridLayout(newLayout)
   }
@@ -77,7 +77,7 @@ function RGL(props) {
         </CDropdownToggle>
         <CDropdownMenu>
           {widgetOptions.map((widget, index) => (
-            <CDropdownItem key={index} onClick={() => handleWidgetSelect(widget)} className={gridLayout.some((current) => current.i === widget.i) ? "widget-dropdown-selected" : undefined}>
+            <CDropdownItem key={index} onClick={() => handleWidgetSelect(widget)} className={gridLayout.some(current => current.i === widget.i) ? "widget-dropdown-selected" : undefined}>
               {widget.i}
             </CDropdownItem>
           ))}
@@ -85,8 +85,9 @@ function RGL(props) {
       </CDropdown>{" "}
       <button onClick={handleSaveLayout}>Save Layout</button>
       <ResponsiveGridLayout className="layout" layout={gridLayout} cols={12} resizeHandles={["ne", "nw", "se", "sw"]} rowHeight={90} maxRows={6} preventCollision compactType={null} onLayoutChange={onLayoutChange}>
-        {gridLayout.map((item) => (
+        {gridLayout.map(item => (
           <div key={item.i} className="react-grid-item" style={{ border: "1px solid black" }}>
+            <h2>{item.i}</h2>
             <ResourcesWidget />
           </div>
         ))}

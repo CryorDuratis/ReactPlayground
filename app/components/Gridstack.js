@@ -3,13 +3,22 @@ import "gridstack/dist/gridstack.min.css"
 import { GridStack } from "gridstack"
 import { CDropdown, CDropdownToggle, CDropdownMenu, CDropdownItem } from "@coreui/react"
 import "@coreui/coreui/dist/css/coreui.min.css"
-import { ResourcesWidget } from "./Widgets"
+import { ResourcesWidget, WidgetSwitchBoard } from "./Widgets"
+// chart style selection option
+import IconButton from "@mui/material/IconButton"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
+import MoreVertIcon from "@mui/icons-material/MoreVert"
 
 function Gridstacked(props) {
   // LOAD and DISPLAY widgets in grid layout ------------------------------------------------------------------------------------------
   // current grid layout with an example generic initial state before the departments customise for themselves
   // the selected widgets highlight in the dropdown will also depend on this state
-  const [gridLayout, setGridLayout] = useState([])
+  const [gridLayout, setGridLayout] = useState([
+    // { id: "map", x: 3, y: 1, w: 6, h: 4, locked: true, noResize: true, noMove: true },
+    { id: "shelters", x: 9, y: 1, w: 3, h: 5, locked: true, styles: ["coreui", "chartjs", "recharts", "victory", "nivo"], style: "coreui" }
+    // { id: "incidents", x: 0, y: 1, w: 3, h: 5, locked: true, noResize: true, noMove: true }
+  ])
 
   // Load the saved grid layout from somewhere (eg localstorage)
   // Set the current grid layout state to align to the saved layout. Component re-renders the new grid layout state.
@@ -38,7 +47,12 @@ function Gridstacked(props) {
     gridRef.current?.destroy(false)
     gridRef.current = GridStack.init(
       {
-        float: true
+        float: true,
+        animate: false,
+        margin: 5,
+        row: 6,
+        cellHeight: "14vh",
+        resizable: { handles: "all" }
       },
       ".dashboard"
     )
@@ -49,7 +63,7 @@ function Gridstacked(props) {
     grid.removeAll(false) // make sure the grid is empty first
     // console.log("before", grid.getGridItems())
 
-    gridLayout.forEach((item) => {
+    gridLayout.forEach(item => {
       grid.makeWidget(`#${item.id}`, item)
     })
     grid.commit() // this
@@ -61,24 +75,25 @@ function Gridstacked(props) {
   // possible widgets. this shouldnt change often since new code has to be written for each widget, so it could be fixed here locally.
   // this stores the list of dropdown items as well as the container configurations for each widget.
   const widgetOptions = [
-    { id: "map", x: 3, y: 1, w: 4, h: 3, locked: true },
-    { id: "casualty", x: 1, y: 0, w: 1, h: 1, autoPosition: true, noResize: true },
-    { id: "resources", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
-    { id: "div1", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
-    { id: "div2", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
-    { id: "div3", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
-    { id: "div4", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
-    { id: "shelters", x: 4, y: 0, w: 2, h: 1, autoPosition: true },
-    { id: "incidents", x: 4, y: 0, w: 2, h: 1, autoPosition: true }
+    { id: "shelters", x: 9, y: 1, w: 3, h: 5, locked: true, autoPosition: true, styles: ["coreui", "chartjs", "recharts", "victory", "nivo"], style: "coreui" },
+    { id: "resources", x: 4, y: 0, w: 2, h: 1, autoPosition: true, styles: ["coreui", "chartjs", "recharts", "victory", "nivo"], style: "coreui" },
+    { id: "casualty", x: 1, y: 0, w: 1, h: 1, autoPosition: true, styles: ["coreui", "chartjs", "recharts", "victory", "nivo"], style: "coreui" },
+    { id: "div1", x: 4, y: 0, w: 2, h: 1, autoPosition: true, styles: ["coreui", "chartjs", "recharts", "victory", "nivo"], style: "coreui" },
+    { id: "div2", x: 4, y: 0, w: 2, h: 1, autoPosition: true, styles: ["coreui", "chartjs", "recharts", "victory", "nivo"], style: "coreui" },
+    { id: "div3", x: 4, y: 0, w: 2, h: 1, autoPosition: true, styles: ["coreui", "chartjs", "recharts", "victory", "nivo"], style: "coreui" },
+    { id: "div4", x: 4, y: 0, w: 2, h: 1, autoPosition: true, styles: ["coreui", "chartjs", "recharts", "victory", "nivo"], style: "coreui" },
+    { id: "div5", x: 4, y: 0, w: 2, h: 1, autoPosition: true, styles: ["coreui", "chartjs", "recharts", "victory", "nivo"], style: "coreui" }
   ]
   // on selection, if selected, remove from gridlayout, else add selected widget to the gridlayout. This changes the state and makes the grid render the newly selected widget immediately. The dropdown should also reflect this change.
-  const handleWidgetSelect = (selectedWidget) => {
-    if (gridLayout.some((current) => current.id === selectedWidget.id)) {
-      setGridLayout(gridLayout.filter((current) => current.id !== selectedWidget.id))
+  const handleWidgetSelect = selectedWidget => {
+    if (gridLayout.some(current => current.id === selectedWidget.id)) {
+      setGridLayout(gridLayout.filter(current => current.id !== selectedWidget.id))
       console.log(selectedWidget.id, " removed")
     } else {
-      setGridLayout([...gridLayout, selectedWidget])
-      console.log(selectedWidget.id, " added")
+      if (gridRef.current.willItFit(selectedWidget)) {
+        setGridLayout([...gridLayout, selectedWidget])
+        console.log(selectedWidget.id, " added")
+      } else alert(`does not fit, needs height of ${selectedWidget.h} and width of ${selectedWidget.w}`)
     }
   }
 
@@ -91,6 +106,34 @@ function Gridstacked(props) {
     localStorage.setItem("savedGridstack", JSON.stringify(savedlayout))
   }
 
+  // style menu ------------------------------
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [selectedWidget, setSelectedWidget] = useState(null)
+  const ITEM_HEIGHT = 48
+  const open = Boolean(anchorEl)
+  const handleClick = (e, widget) => {
+    setAnchorEl(e.currentTarget)
+    setSelectedWidget(widget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+    setSelectedWidget(null)
+  }
+  const handleSelect = style => {
+    console.log("selected", selectedWidget, style)
+    setGridLayout(prevWidgets => {
+      return prevWidgets.map(prevWidget => {
+        if (prevWidget.id === selectedWidget.id) {
+          // Update the style for the specific widget
+          return { ...prevWidget, style: style }
+        }
+        return prevWidget
+      })
+    })
+    // setSelectedWidget(props => ({ ...props, style: style }))
+    handleClose()
+  }
+
   // RENDER --------------------------------
   return (
     <div>
@@ -100,7 +143,7 @@ function Gridstacked(props) {
         </CDropdownToggle>
         <CDropdownMenu>
           {widgetOptions.map((widget, index) => (
-            <CDropdownItem key={index} onClick={() => handleWidgetSelect(widget)} className={gridLayout.some((current) => current.id === widget.id) ? "widget-dropdown-selected" : undefined}>
+            <CDropdownItem key={index} onClick={() => handleWidgetSelect(widget)} className={gridLayout.some(current => current.id === widget.id) ? "widget-dropdown-selected" : undefined}>
               {widget.id}
             </CDropdownItem>
           ))}
@@ -112,8 +155,43 @@ function Gridstacked(props) {
           return (
             <div id={item.id} key={item.id} className={"grid-stack-item"}>
               <div className="grid-stack-item-content">
-                <h2>{item.id}</h2>
-                <ResourcesWidget id={item.id} />
+                {item.styles && (
+                  <IconButton aria-label="more" id="long-button" className="options-button" aria-controls={open ? "long-menu" : undefined} aria-expanded={open ? "true" : undefined} aria-haspopup="true" onClick={e => handleClick(e, item)}>
+                    <MoreVertIcon />
+                  </IconButton>
+                )}
+                {item.styles && (
+                  <Menu
+                    id="long-menu"
+                    MenuListProps={{
+                      "aria-labelledby": "long-button"
+                    }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{
+                      style: {
+                        maxHeight: ITEM_HEIGHT * 4.5,
+                        width: "20ch"
+                      }
+                    }}
+                  >
+                    {selectedWidget?.styles?.map((style, ind) => (
+                      <MenuItem
+                        key={ind}
+                        selected={style === selectedWidget.style}
+                        onClick={() => {
+                          handleSelect(style)
+                        }}
+                      >
+                        {style}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                )}
+                <div style={{ height: "-webkit-fill-available", width: "100%" }} id={`${item.id}container`}>
+                  <WidgetSwitchBoard id={item.id} displayStyle={item.style} />
+                </div>
               </div>
             </div>
           )
