@@ -71,6 +71,7 @@ function Gridstacked(props) {
         grid.removeWidget(griditem, false)
         console.log("error", grid.getGridItems())
         grid.makeWidget(`#${item.id}`)
+        // grid.update(griditem, item)
         console.log("try fix", grid.getGridItems())
       }
     })
@@ -129,13 +130,14 @@ function Gridstacked(props) {
   }
   const handleSelect = style => {
     console.log("selected", selectedWidget, style)
+    const currentLayout = gridRef.current.save(false)
     setGridLayout(prevWidgets => {
-      return prevWidgets.map(prevWidget => {
+      return prevWidgets.map((prevWidget, index) => {
         if (prevWidget.id === selectedWidget.id) {
           // Update the style for the specific widget
-          return { ...prevWidget, style: style }
+          return { ...currentLayout[index], styles: prevWidget.styles, style: style }
         }
-        return prevWidget
+        return { ...currentLayout[index], styles: prevWidget.styles, style: prevWidget.style }
       })
     })
     // setSelectedWidget(props => ({ ...props, style: style }))
