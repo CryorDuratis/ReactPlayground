@@ -57,17 +57,25 @@ function Gridstacked(props) {
       ".dashboard"
     )
     const grid = gridRef.current
-    // console.log("before batchupdate", grid.getGridItems())
+    console.log("before batchupdate", grid.getGridItems())
     grid.batchUpdate()
-    // console.log("before removeall", grid.getGridItems())
+    console.log("before removeall", grid.getGridItems())
     grid.removeAll(false) // make sure the grid is empty first
-    // console.log("before", grid.getGridItems())
+    console.log("before", grid.getGridItems())
 
+    console.log(gridLayout)
     gridLayout.forEach(item => {
+      const griditem = document.getElementById(item.id)
       grid.makeWidget(`#${item.id}`, item)
+      if (!griditem.classList.contains("ui-resizable-autohide")) {
+        grid.removeWidget(griditem, false)
+        console.log("error", grid.getGridItems())
+        grid.makeWidget(`#${item.id}`)
+        console.log("try fix", grid.getGridItems())
+      }
     })
     grid.commit() // this
-    console.log(gridLayout)
+
     console.log("after", grid.getGridItems())
   }, [gridLayout])
 
@@ -190,7 +198,7 @@ function Gridstacked(props) {
                   </Menu>
                 )}
                 <div style={{ height: "-webkit-fill-available", width: "100%" }} id={`${item.id}container`}>
-                  <WidgetSwitchBoard id={item.id} displayStyle={item.style} />
+                  <WidgetSwitchBoard chart={item.id} displayStyle={item.style} />
                 </div>
               </div>
             </div>

@@ -3,11 +3,11 @@ import { Chartjs, Coreui, NivoC, RechartsC, StatWidget, VictoryC } from "./Widge
 import { loadModules } from "esri-loader"
 
 export const WidgetSwitchBoard = props => {
-  switch (props.id) {
+  switch (props.chart) {
     case "map":
       return <MapWidget />
     case "incidents":
-      return <IncidentsWidget id={props.id} />
+      return <IncidentsWidget id={props.chart} />
     case "shelters":
       return <SheltersWidget displayStyle={props.displayStyle} />
     case "casualty":
@@ -85,7 +85,7 @@ export const MapWidget = props => {
   return
 }
 export const IncidentsWidget = props => {
-  return <h2>{props.id}</h2>
+  return <h2>{props.chart}</h2>
 }
 export const SheltersWidget = props => {
   // query for resources data
